@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse, json, html
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 IDS = ('trace_id','traceId','job_id','jobId','request_id','requestId','run_id','runId')
 
@@ -18,7 +18,10 @@ def parse_ts(x):
             return float(v)
         if isinstance(v, str):
             try:
-                return datetime.fromisoformat(v.replace('Z','+00:00')).timestamp()
+                dt = datetime.fromisoformat(v.replace('Z','+00:00'))
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                return dt.timestamp()
             except ValueError:
                 pass
     return None
@@ -28,7 +31,10 @@ def load(path):
         if not line.strip():
             continue
         try:
-            rows.append((n, json.loads(line)))
+            obj = json.loads(line)
+            if not isinstance(obj, dict):
+                raise ValueError(f'expected JSON object, got {type(obj).__name__}')
+            rows.append((n, obj))
         except Exception as e:
             bad.append({'line': n, 'error': str(e)})
     return rows, bad
