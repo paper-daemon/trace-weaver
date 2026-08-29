@@ -1,1 +1,1 @@
-e0fc25a81f5f5f722a3c2f114a605d29a24feb89ff92a6d37c066e1e12aaaf63  trace-weaver-v1.0.0.zip
+6fa5e64cb4f71a74b220ec49cf20cb3d0f1180f859f7b52e8a32fdb4190b75b1  trace-weaver-v1.0.0.zip

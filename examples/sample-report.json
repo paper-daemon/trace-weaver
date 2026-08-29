@@ -1,0 +1,25 @@
+{
+  "traces": [
+    {
+      "id": "trace_id:checkout-1",
+      "events": 3,
+      "duration": 43.0,
+      "gaps": [
+        42.0
+      ],
+      "retries": [
+        2
+      ],
+      "duplicates": []
+    },
+    {
+      "id": "trace_id:sync-2",
+      "events": 1,
+      "duration": 0,
+      "gaps": [],
+      "retries": [],
+      "duplicates": []
+    }
+  ],
+  "malformed_lines": []
+}

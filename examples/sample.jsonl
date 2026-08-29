@@ -1,0 +1,4 @@
+{"trace_id":"checkout-1","timestamp":0,"event":"start"}
+{"trace_id":"checkout-1","timestamp":42,"event":"retry attempt"}
+{"trace_id":"checkout-1","timestamp":43,"event":"done"}
+{"trace_id":"sync-2","timestamp":2,"event":"start"}
