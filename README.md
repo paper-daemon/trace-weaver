@@ -6,5 +6,5 @@ python trace_weaver.py app.jsonl --gap 30 --html report.html --json report.json
 ```
 外部依存なし / Python 3.10+ / MIT。ログそのものを書き換えません。
 
-- BOOTH: https://amase-memo.booth.pm/
+- BOOTH: https://amase-memo.booth.pm/items/8778493
 - 作者サイト: https://paper-daemon.github.io/
