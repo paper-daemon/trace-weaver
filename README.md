@@ -8,3 +8,6 @@ python trace_weaver.py app.jsonl --gap 30 --html report.html --json report.json
 
 - BOOTH: https://amase-memo.booth.pm/items/8778493
 - 作者サイト: https://paper-daemon.github.io/
+
+## BOOTH
+0円配布: https://amase-memo.booth.pm/items/8778523
