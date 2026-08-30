@@ -45,3 +45,25 @@ class T(unittest.TestCase):
         r = analyze(rows, 0)[0]
         self.assertEqual(r['duration'], 0)
         self.assertEqual(r['gaps'], [])
+
+    def test_snake_and_camel_case_id_aliases_share_one_trace(self):
+        rows = [
+            (1, {'trace_id':'same','timestamp':0,'event':'start'}),
+            (2, {'traceId':'same','timestamp':40,'event':'retry'}),
+        ]
+        report = analyze(rows, 30)
+        self.assertEqual(len(report), 1)
+        self.assertEqual(report[0]['id'], 'trace_id:same')
+        self.assertEqual(report[0]['events'], 2)
+        self.assertEqual(report[0]['duration'], 40.0)
+        self.assertEqual(report[0]['gaps'], [40.0])
+        self.assertEqual(report[0]['retries'], [2])
+
+    def test_same_value_in_different_id_families_stays_separate(self):
+        report = analyze([
+            (1, {'traceId':'same','timestamp':0}),
+            (2, {'jobId':'same','timestamp':0}),
+            (3, {'requestId':'same','timestamp':0}),
+            (4, {'runId':'same','timestamp':0}),
+        ], 30)
+        self.assertEqual({r['id'] for r in report}, {'trace_id:same','job_id:same','request_id:same','run_id:same'})
