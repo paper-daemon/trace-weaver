@@ -1,6 +1,6 @@
 import unittest, tempfile, json
 from pathlib import Path
-from trace_weaver import load, analyze
+from trace_weaver import load, analyze, validate_output_paths
 
 class T(unittest.TestCase):
     def test_gap_retry_duplicate(self):
@@ -67,3 +67,16 @@ class T(unittest.TestCase):
             (4, {'runId':'same','timestamp':0}),
         ], 30)
         self.assertEqual({r['id'] for r in report}, {'trace_id:same','job_id:same','request_id:same','run_id:same'})
+
+    def test_output_paths_must_not_overwrite_input(self):
+        p = Path(tempfile.mktemp())
+        with self.assertRaises(ValueError):
+            validate_output_paths(p, p)
+        with self.assertRaises(ValueError):
+            validate_output_paths(p, Path(tempfile.mktemp()), p)
+
+    def test_html_and_json_outputs_must_be_distinct(self):
+        src = Path(tempfile.mktemp())
+        out = Path(tempfile.mktemp())
+        with self.assertRaises(ValueError):
+            validate_output_paths(src, out, out)
