@@ -3,12 +3,18 @@ import argparse, json, html, math
 from pathlib import Path
 from datetime import datetime, timezone
 
-IDS = ('trace_id','traceId','job_id','jobId','request_id','requestId','run_id','runId')
+ID_ALIASES = (
+    ('trace_id', ('trace_id','traceId')),
+    ('job_id', ('job_id','jobId')),
+    ('request_id', ('request_id','requestId')),
+    ('run_id', ('run_id','runId')),
+)
 
 def pick_id(x):
-    for k in IDS:
-        if x.get(k) not in (None, ''):
-            return f'{k}:{x[k]}'
+    for canonical, aliases in ID_ALIASES:
+        for k in aliases:
+            if x.get(k) not in (None, ''):
+                return f'{canonical}:{x[k]}'
     return 'unkeyed'
 
 def parse_ts(x):
