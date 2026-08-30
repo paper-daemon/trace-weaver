@@ -34,6 +34,7 @@ def parse_ts(x):
             except ValueError:
                 pass
     return None
+
 def load(path):
     rows, bad = [], []
     for n, line in enumerate(Path(path).read_text(encoding='utf-8').splitlines(), 1):
@@ -47,6 +48,16 @@ def load(path):
         except Exception as e:
             bad.append({'line': n, 'error': str(e)})
     return rows, bad
+
+def validate_output_paths(input_path, html_path, json_path=None):
+    paths = [('input', Path(input_path).resolve()), ('html', Path(html_path).resolve())]
+    if json_path:
+        paths.append(('json', Path(json_path).resolve()))
+    seen = {}
+    for label, path in paths:
+        if path in seen:
+            raise ValueError(f'{label} path must differ from {seen[path]} path: {path}')
+        seen[path] = label
 
 def analyze(rows, gap=30):
     groups = {}
@@ -105,6 +116,10 @@ def main():
     ap.add_argument('--html', default='trace-weaver-report.html')
     ap.add_argument('--json')
     a = ap.parse_args()
+    try:
+        validate_output_paths(a.jsonl, a.html, a.json)
+    except ValueError as e:
+        ap.error(str(e))
     rows, bad = load(a.jsonl)
     report = analyze(rows, a.gap)
     Path(a.html).write_text(render(report, bad), encoding='utf-8')
