@@ -32,3 +32,16 @@ class T(unittest.TestCase):
         ]))
         r = analyze(load(p)[0], 30)[0]
         self.assertEqual(r['gaps'], [31.0])
+
+    def test_boolean_and_nonfinite_timestamps_are_not_treated_as_time(self):
+        p = Path(tempfile.mktemp())
+        p.write_text('\n'.join([
+            '{"trace_id":"a","timestamp":true,"event":"bool"}',
+            '{"trace_id":"a","timestamp":NaN,"event":"nan"}',
+            '{"trace_id":"a","timestamp":10,"event":"real"}',
+        ]))
+        rows, bad = load(p)
+        self.assertEqual(bad, [])
+        r = analyze(rows, 0)[0]
+        self.assertEqual(r['duration'], 0)
+        self.assertEqual(r['gaps'], [])
