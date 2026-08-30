@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import argparse, json, html
+import argparse, json, html, math
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -14,8 +14,11 @@ def pick_id(x):
 def parse_ts(x):
     for k in ('timestamp','time','ts','created_at','createdAt'):
         v = x.get(k)
+        if isinstance(v, bool):
+            continue
         if isinstance(v, (int, float)):
-            return float(v)
+            value = float(v)
+            return value if math.isfinite(value) else None
         if isinstance(v, str):
             try:
                 dt = datetime.fromisoformat(v.replace('Z','+00:00'))
