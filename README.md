@@ -11,3 +11,7 @@ python trace_weaver.py app.jsonl --gap 30 --html report.html --json report.json
 
 ## BOOTH
 0円配布: https://amase-memo.booth.pm/items/8778523
+
+## ID aliases
+
+`trace_id` / `traceId`、`job_id` / `jobId`、`request_id` / `requestId`、`run_id` / `runId` は、それぞれ同じID familyとして束ねます。表記揺れで1本のtraceが分裂しません。異なるfamily同士は値が同じでも混ぜません。
